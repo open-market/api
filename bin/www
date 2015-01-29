@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+var app    = require('../'),
+    server = app.listen(3001);

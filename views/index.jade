@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  div.container(ng-controller='thetaSearchCtrl')
+    div.row
+      div.col-md-12
+        form(style='margin-top:7%', ng-submit='search()')
+          div.text-center
+            h1.title Open Market
+            p.subtitle Unofficial API for the Steam Market
+            a(href='http://docs.openmarket.apiary.io/#') API Docs
+            span  -&nbsp;
+            a(href='https://github.com/open-market/api') Github
+          div.form-group.search-container
+            input.form-control(type='text', ng-model='searchText', placeholder='Search market items', autofocus)
+        hr
+        h3.text-center.no-results(ng-show='noResults', ng-cloak) No results
+        table.table.table-striped.table-bordered.results-table(ng-show='results.length', ng-cloak)
+          thead
+            tr
+              th Item name
+              th Game
+              th Last median price
+              th Times seen
+              th First seen
+          tbody
+            tr(ng-repeat='result in results')
+              td {{ result.name }}
+              td {{ result.appID | parseAppID }}
+              td {{ result.price / 100 | currency | formatPrice }}
+              td {{ result.timesSeen | commaParse }}
+              td {{ result.firstSeen | date:'short' }}
