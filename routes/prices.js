@@ -11,29 +11,14 @@ module.exports = function* () {
       appID    = query.appID,
       itemName = query.item;
 
-  if (!itemName) {
+  if (!itemName)
+    this.throw(400, 'Missing item parameter');
 
-    this.status(400);
-    this.body = { error: 'Missing item parameter' };
-    return;
+  else if (!appID)
+    this.throw(400, 'Missing appID parameter');
 
-  }
-
-  else if (!appID) {
-
-    this.status(400);
-    this.body = { error: 'Missing appID parameter' };
-    return;
-
-  }
-
-  else if (isNaN(appID)) {
-
-    this.status(400);
-    this.body = { error: 'Invalid appID' };
-    return;
-
-  }
+  else if (isNaN(appID))
+    this.throw(400, 'Invalid appID');
 
   /**
    * Items price history
