@@ -8,3 +8,23 @@ var server = app.listen(serverPort, function () {
   console.log(`Server listening on port ${serverPort}`);
 
 });
+
+process.on('SIGTERM', function () {
+
+  console.log('Shutting down server...');
+
+  server.close(function () {
+
+    console.log('Closed remaining connections.');
+    process.exit();
+
+  });
+
+  setTimeout(function () {
+
+    console.log('Force shutting down server.');
+    process.exit(1);
+
+  }, 2000);
+
+});
