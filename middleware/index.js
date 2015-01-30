@@ -38,7 +38,8 @@ exports.errorHandler = function* (next) {
 
     this.body = { error: (err.status === 400) ? err.message : 'API error'  };
 
-    this.app.emit('error', err, this);
+    if (err.status !== 400)
+      this.app.emit('error', err, this);
 
   }
 

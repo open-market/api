@@ -12,6 +12,15 @@ module.exports = function* () {
       appID       = query.appID,
       itemName    = query.name;
 
+  if (!itemName)
+    this.throw(400, 'Missing name parameter');
+
+  else if (appID && isNaN(appID))
+    this.throw(400, 'Invalid appID');
+
+  else if (query.limit && isNaN(query.limit))
+    this.throw(400, 'Invalid limit parameter');
+
   /**
    * MongoDB search query
    * @type {Object}
