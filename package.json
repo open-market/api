@@ -1,11 +1,11 @@
 {
   "name": "open-market-api",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Open Market API",
   "main": "app.js",
   "scripts": {
     "start": "node bin/www",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/mocha/bin/mocha"
   },
   "author": "Alvin Lazaro <me@alvinl.com>",
   "license": "MIT",
@@ -16,5 +16,9 @@
     "mongoose": "^3.8.22",
     "redis": "^0.12.1",
     "then-redis": "^1.3.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.1.0",
+    "should": "^4.6.2"
   }
 }
