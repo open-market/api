@@ -1,6 +1,7 @@
 
 module.exports = {
 
-  items: require('./items')
+  items:     require('./items'),
+  itemStats: require('./item_stats')
 
 };

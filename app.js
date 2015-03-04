@@ -25,7 +25,6 @@ mongoose.connect(process.env.MONGO_URI);
 app.use(jade.middleware(jadeOpts));
 app.use(middleware.errorHandler);
 app.use(middleware.pageNotFound);
-app.use(middleware.redis);
 
 // Routes
 app.use(route.get('/', routes.index));

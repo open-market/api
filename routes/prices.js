@@ -3,9 +3,11 @@
  * Dependencies
  */
 
-var utils = require('../lib/utils')();
+const mongoose = require('mongoose');
 
 module.exports = function* () {
+
+  'use strict';
 
   var query    = this.request.query,
       appID    = query.appID,
@@ -20,17 +22,32 @@ module.exports = function* () {
   else if (isNaN(appID))
     this.throw(400, 'Invalid appID');
 
-  /**
-   * Items price history
-   * @type {Array}
-   */
-  var priceHistory = yield this.redis.lrange(`market:prices:${appID}:${encodeURIComponent(itemName)}`, 0, 24);
+  const oneDayAgo = Date.now() - 86400000;
 
-  // Format `priceHistory` and only return data from the past 24 hours
-  priceHistory = priceHistory
-                  .filter(utils.lastDayPrices)
-                  .map(utils.formatPricePoints);
+  let recentPrices = yield mongoose.models.item_stats
+                                            .find({ name:  itemName,
+                                                    appID: appID,
+                                                    timestamp: { $gte: new Date(oneDayAgo) } },
+                                                  { _id: 0,
+                                                    timestamp: 1,
+                                                    medianPrice: 1,
+                                                    totalSold: 1 })
+                                            .sort({ timestamp: -1 })
+                                            .limit(24)
+                                            .exec();
 
-  this.body = { history: priceHistory } ;
+  recentPrices = recentPrices.map(function (pricePoint) {
+
+    return {
+
+      time:  new Date(pricePoint.timestamp).getTime(),
+      price: pricePoint.medianPrice,
+      sold:  pricePoint.totalSold
+
+    };
+
+  });
+
+  this.body = { history: recentPrices };
 
 };
